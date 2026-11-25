@@ -1,4 +1,5 @@
 import streamlit as st
+import requests
 
 st.markdown("""
 # Zoologist front
@@ -44,10 +45,7 @@ else:
     st.write('I was not predict for now 😞')
 
 
-col1, col2,col3 = st.columns(3)
-col1.metric("Bisco", "probability : %")
-col2.metric("Dream", "probability : %")
-col3.metric("Torgersen", "probability : %")
+
 
 # """
 # ## Once we have these, let's call our API in order to retrieve a prediction
@@ -68,3 +66,21 @@ col3.metric("Torgersen", "probability : %")
 
 # ## Finally, we can display the prediction to the user
 # """
+
+url = 'http://localhost:8001/predict'
+
+params = {
+    "island" : input_island,
+    "bill_length_mm" : input_bill_length,
+    "bill_depth_mm" : input_bill_depth,
+    "flipper_length_mm" : input_flipper_length,
+    "body_mass_g" : input_body_mass,
+    "sex" : selection_sex
+}
+
+response = requests.get(url, params=params).json()
+
+
+st.markdown(f"""
+# Your prediction is : {response['prediction']}
+""")
