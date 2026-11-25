@@ -29,11 +29,11 @@ st.markdown(
     ## Input the characteristics of the penguin ?
     """
 )
-input_island = st.text_input('Island', '(Biscoe, Dream or Torgersen)')
-input_bill_length = st.text_input('bill length (in mm)', '(in mm)')
-input_bill_depth = st.text_input('bill depth (in mm)', '(in mm)')
-input_flipper_length = st.text_input('flipper length (in mm)', '(in mm)')
-input_body_mass = st.text_input('body mass', '(in g)')
+input_island = st.text_input('Island', 'Dream')
+input_bill_length = st.number_input('bill length (in mm)', 0)
+input_bill_depth = st.number_input('bill depth (in mm)', 0)
+input_flipper_length = st.number_input('flipper length (in mm)', 0)
+input_body_mass = st.number_input('body mass', 500)
 selection_sex = st.radio('Select a sex ', ('Male', 'Female'))
 
 
@@ -41,6 +41,24 @@ if st.button('Prediction'):
     # print is visible in the server output, not in the page
     print('button clicked!')
     st.write('I was predict 🎉')
+
+    url = st.secrets['API_URL']
+
+    params = {
+        "island" : input_island,
+        "bill_length_mm" : input_bill_length,
+        "bill_depth_mm" : input_bill_depth,
+        "flipper_length_mm" : input_flipper_length,
+        "body_mass_g" : input_body_mass,
+        "sex" : selection_sex
+    }
+
+    response = requests.get(url, params=params).json()
+
+
+    st.markdown(f"""
+    # Your prediction is : {response['prediction']}
+    """)
 else:
     st.write('I was not predict for now 😞')
 
@@ -67,20 +85,4 @@ else:
 # ## Finally, we can display the prediction to the user
 # """
 
-url = 'http://localhost:8001/predict'
-
-params = {
-    "island" : input_island,
-    "bill_length_mm" : input_bill_length,
-    "bill_depth_mm" : input_bill_depth,
-    "flipper_length_mm" : input_flipper_length,
-    "body_mass_g" : input_body_mass,
-    "sex" : selection_sex
-}
-
-response = requests.get(url, params=params).json()
-
-
-st.markdown(f"""
-# Your prediction is : {response['prediction']}
-""")
+#url = 'http://localhost:8001/predict'
