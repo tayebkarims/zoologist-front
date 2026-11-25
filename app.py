@@ -42,7 +42,7 @@ if st.button('Prediction'):
     print('button clicked!')
     st.write('I was predict 🎉')
 
-    url = st.secrets['API_URL']
+    url = st.secrets['API_CLOUD_URL']
 
     params = {
         "island" : input_island,
